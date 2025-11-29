@@ -1,7 +1,8 @@
 # Sistema Jurídico - Testes ⚖️
 
-![img_inicio](https://www.bcompany.com.br/wp-content/uploads/2020/03/martelo-juiz-laptop-sistema-juridico-1024x683.jpg.webp)
+![img_inicio](img.png)
 > Trabalho Final da disciplina de Engenharia de Software - SOFT
+
 > **Universidade do Estado de Santa Catarina (UDESC) - CCT** 
 
 ## 📄 Sobre o Projeto
