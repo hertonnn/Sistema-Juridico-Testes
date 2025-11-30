@@ -8,8 +8,7 @@ class TestSistemaJuridico(unittest.TestCase):
 
     def setUp(self):
         """
-        Configuração inicial para cada teste.
-        Cria instâncias básicas para evitar repetição de código.
+        Criando instâncias básicas para evitar repetição de código
         """
         self.processo = Processo(numero="5002025.8.24.0038", assunto="Danos Morais")
         self.advogado = Advogado("Dr. Silva", "123.456.789-00", "silva@law.com", "OAB/SC 12345")
@@ -17,11 +16,10 @@ class TestSistemaJuridico(unittest.TestCase):
 
     def test_fluxo_observer_notificacao(self):
         """
-        Testa o Padrão Observer.
-        Verifica se o advogado (Observer) recebe notificação quando o processo (Subject) é movimentado.
+        Verifica se o advogado (o observer) recebe notificação quando o processo (o subject) é movimentado
         """
         self.processo.anexar(self.advogado)
-        tramite = Tramite("Despacho", "Aguardando manifestação")
+        tramite = Tramite("Despacho", "Aguardando manifestação") 
         self.processo.adicionar_tramite(tramite)
         
         # Teste
@@ -30,11 +28,11 @@ class TestSistemaJuridico(unittest.TestCase):
             self.advogado.notificacoes,
             "O padrão Observer falhou: O advogado não recebeu a notificação do trâmite."
         )
+        
 
     def test_ciclo_vida_julgamento_encerramento(self):
         """
-        Testa o papel do Juiz e o encerramento do processo[cite: 11, 49].
-        Justificativa Crítica: O encerramento é o estado final da entidade central.
+        Testa boa parte do processo de encerramento de um processo. 
         """
         decisao = Decisao(resultado="Procedente", texto_integral="O réu deve pagar indenização.")
         
@@ -44,13 +42,14 @@ class TestSistemaJuridico(unittest.TestCase):
         self.assertEqual(self.processo.status, "Encerrado", "O processo deveria estar com status Encerrado após julgamento.")
         self.assertIsNotNone(self.processo.data_encerramento, "A data de encerramento não foi registrada.")
         
-        ultimo_tramite = self.processo.tramites[-1]
-        self.assertEqual(ultimo_tramite.tipo, "Julgamento")
+        ultimo_tramite = self.processo.tramites[-1] # Pega o último tramite da lista
+        # Ao julgar, um novo tramite é criado do tipo Julgamento, usando decisão em sua descrição.
+        self.assertEqual(ultimo_tramite.tipo, "Julgamento") 
         self.assertIn("Procedente", ultimo_tramite.descricao)
 
     def test_factory_method_documento(self):
         """
-        Testa o Padrão Factory Method implementado em Tramite.
+        Testa o Padrão Factory Method implementado em Tramite
         """
         tramite = Tramite("Petição", "Petição inicial do autor")
         
@@ -58,11 +57,11 @@ class TestSistemaJuridico(unittest.TestCase):
         
         self.assertEqual(doc.tipo, "PDF")
         self.assertEqual(tramite.documento_anexo, doc, "O documento criado não foi vinculado ao trâmite.")
-        self.assertTrue(doc.validar_formato())
+        self.assertTrue(doc.validar_formato()) 
 
     def test_agendamento_audiencia(self):
         """
-        Testa o agendamento de audiência e vinculo com o processo[cite: 48].
+        Testa o agendamento de audiência e vinculo com o processo
         """
         data_audiencia = datetime(2025, 12, 1, 14, 0)
         audiencia = self.processo.agendar_audiencia(data_audiencia, "Sala 1", "Conciliação")
@@ -72,8 +71,7 @@ class TestSistemaJuridico(unittest.TestCase):
 
     def test_validacao_processo_ja_encerrado(self):
         """
-        Testa integridade e tratamento de erro (Requisito Não Funcional)[cite: 29].
-        Tenta encerrar um processo que já está encerrado.
+        Tenta encerrar um processo que já está encerrado e estourar um erro esperado
         """
         self.processo.status = "Encerrado"
         

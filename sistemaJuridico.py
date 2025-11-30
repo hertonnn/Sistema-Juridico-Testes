@@ -1,6 +1,8 @@
-from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import List, Optional
+# Abstract Base Classes (Classes Base Abstratas)
+# É o que permite o uso do @abstractmethod
+from abc import ABC, abstractmethod 
 
 # --- Padrão Observer: Interfaces ---
 class Observer(ABC):
@@ -10,7 +12,7 @@ class Observer(ABC):
 
 class Subject(ABC):
     def __init__(self):
-        self._observadores: List[Observer] = []
+        self._observadores: List[Observer] = [] # Lista de inscritos
 
     def anexar(self, observer: Observer):
         if observer not in self._observadores:
@@ -45,6 +47,14 @@ class Tramite:
         novo_doc = Documento(tipo_doc, conteudo)
         self.documento_anexo = novo_doc
         return novo_doc
+    # SE NÃO USÁSSEMOS FACTORY METHOD
+    '''
+    meu_tramite = Tramite("Despacho", "Texto...")
+    meu_documento = Documento("PDF", "Conteúdo...")
+
+    # Pode acontecer de o programador não fazer esse link:
+    meu_tramite.documento_anexo = meu_documento
+    ''' 
 
 class Decisao:
     def __init__(self, resultado: str, texto_integral: str):
@@ -60,7 +70,7 @@ class Pessoa(ABC):
         self.cpf_cnpj = cpf_cnpj
         self.email = email
 
-class Advogado(Pessoa, Observer):
+class Advogado(Pessoa, Observer): # Herda Pessoa e Observer
     def __init__(self, nome: str, cpf_cnpj: str, email: str, oab: str):
         super().__init__(nome, cpf_cnpj, email)
         self.oab = oab
